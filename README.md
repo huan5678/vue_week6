@@ -1,24 +1,7 @@
-# vue-week6
+# 路由使用
 
-## Project setup
-```
-yarn install
-```
-
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- 使用 Vue Cli 完成路由設定
+- 在 Vue Cli 中完成登入、前台表單驗證功能
+- 建立 .env 檔案內容
+  - VUE_APP_API=
+  - VUE_APP_PATH=
