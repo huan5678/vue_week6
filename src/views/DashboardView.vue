@@ -1,5 +1,5 @@
 <script>
-import { onBeforeMount, computed, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { $vfm } from 'vue-final-modal';
 
@@ -23,18 +23,20 @@ export default {
     const router = useRouter();
     const isOpenModal = ref(false);
 
-    function handleOpenModal()
+    function handleOpenModal(id) {
+      isOpenModal.value = true;
+      $vfm.show(id);
+    }
 
     onBeforeMount(() => {
       handleGetToken();
       handleCheckUser();
       const cookieToken = handleGetToken();
-      cookieToken[0] === '' && router.push('/login');
+      if (cookieToken[0] === '') router.push('/login');
     });
 
     return {
-      modalState: computed(() => state.modalType),
-      products: computed(() => state.modalProps),
+      handleOpenModal,
     };
   },
 };
@@ -43,14 +45,20 @@ export default {
 <template>
   <main class="bg-gray-100">
     <div class="container">
-      <ProductsTable />
-
+      <ProductsTable handleOpenModal="handleOpenModal" />
+      <vue-final-modal
+        v-model="isOpenModal"
+        classes="flex justify-center items-center bg-opacity-50 backdrop-blur-[2px]"
+        content-class="bg-gray-50 rounded-md shadow-md overflow-hidden"
+        focus-trap
+      >
         <ModalCardDelete v-if="modalState === 'productDelete'" />
         <ModalCardDetail v-if="modalState === 'getDetail'" />
         <ModalCardAddition
           v-if="modalState === 'productEdit' || modalState === 'productCreate'"
           :products="products"
         />
+      </vue-final-modal>
     </div>
   </main>
 </template>

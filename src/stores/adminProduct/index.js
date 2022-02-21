@@ -12,12 +12,23 @@ export const useAdminProductStore = defineStore('adminProduct', () => {
     pagination: {},
     currentPage: 1,
     category: null,
+    tempProduct: {},
   });
+
+  const functionSelected = reactive({
+    selected: '',
+  });
+
+  function handleSelectFunction(selected, item) {
+    functionSelected.selected = selected;
+    productList.tempProduct = item;
+  }
 
   const adminStore = useAdminStore();
 
   function handleGetProductAll() {
-    axios.get(`${baseUrl}api/${apiPath}/admin/products/all`, { token: adminStore.token })
+    axios
+      .get(`${baseUrl}api/${apiPath}/admin/products/all`, { token: adminStore.token })
       .then((res) => {
         // console.log(res.data);
         productList.products = res.data.products;
@@ -27,15 +38,15 @@ export const useAdminProductStore = defineStore('adminProduct', () => {
       });
   }
 
-  function handleGetProductList(
-    page = productList.currentPage,
-    category = productList.category,
-  ) {
+  function handleGetProductList(page = productList.currentPage, category = productList.category) {
     let productCategory = category;
     if (category === null) {
       productCategory = '';
     }
-    axios.get(`${baseUrl}api/${apiPath}/admin/products?page=${page}${productCategory}`, { token: adminStore.token })
+    axios
+      .get(`${baseUrl}api/${apiPath}/admin/products?page=${page}${productCategory}`, {
+        token: adminStore.token,
+      })
       .then((res) => {
         // console.log(res.data);
 
@@ -47,7 +58,8 @@ export const useAdminProductStore = defineStore('adminProduct', () => {
       });
   }
   function handleEditProduct(id, data) {
-    axios.put(`${baseUrl}api/${apiPath}/admin/product/${id}`, data, { token: adminStore.token })
+    axios
+      .put(`${baseUrl}api/${apiPath}/admin/product/${id}`, data, { token: adminStore.token })
       .then(() => {
         handleGetProductList();
       })
@@ -57,7 +69,8 @@ export const useAdminProductStore = defineStore('adminProduct', () => {
   }
 
   function handleDeleteProduct(id) {
-    axios.delete(`${baseUrl}api/${apiPath}/admin/product/${id}`, { token: adminStore.token })
+    axios
+      .delete(`${baseUrl}api/${apiPath}/admin/product/${id}`, { token: adminStore.token })
       .then(() => {
         handleGetProductList();
       })
@@ -67,7 +80,8 @@ export const useAdminProductStore = defineStore('adminProduct', () => {
   }
 
   function handleCreateProduct(data) {
-    axios.post(`${baseUrl}api/${apiPath}/admin/product`, data, { token: adminStore.token })
+    axios
+      .post(`${baseUrl}api/${apiPath}/admin/product`, data, { token: adminStore.token })
       .then(() => {
         handleGetProductList(productList.currentPage);
       })
@@ -86,12 +100,14 @@ export const useAdminProductStore = defineStore('adminProduct', () => {
 
   return {
     productList,
+    functionSelected,
     handleCreateProduct,
     handleGetProductAll,
     handleGetProductList,
     handleEditProduct,
     handleDeleteProduct,
     handleImageUpload,
+    handleSelectFunction,
   };
 });
 export default useAdminProductStore;
