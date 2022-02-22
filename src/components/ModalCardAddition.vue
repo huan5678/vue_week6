@@ -7,9 +7,11 @@ export default {
   components: { ModalCardTitle },
   props: { products: Object },
   setup(props) {
-    const { modalStore, adminProductStore } = useStore();
-    const { state, closeModal } = modalStore;
-    const { handleEditProduct, handleCreateProduct, handleImageUpload } = adminProductStore;
+    const { adminProductStore } = useStore();
+    const {
+      handleEditProduct, handleCreateProduct,
+      handleImageUpload, functionSelected,
+    } = adminProductStore;
 
     const productData = computed({
       get: () => ({ ...props.products }),
@@ -17,13 +19,6 @@ export default {
     });
 
     const imageFile = ref(null);
-
-    function handleProductAddition() {
-      state.modalType === 'productEdit'
-        ? handleEditProduct(productData.value.id, productData.value)
-        : handleCreateProduct(productData.value);
-      handleResetFormInput();
-    }
 
     function handleResetFormInput() {
       productData.value = {
@@ -38,7 +33,15 @@ export default {
         imageUrl: '',
         imagesUrl: [],
       };
-      closeModal();
+    }
+
+    function handleProductAddition() {
+      if (functionSelected.selected === 'productEdit') {
+        handleEditProduct(productData.value.id, productData.value);
+      } else {
+        handleCreateProduct(productData.value);
+      }
+      handleResetFormInput();
     }
 
     function handleGetImageUrl(target) {
@@ -47,9 +50,11 @@ export default {
       console.log(file);
       handleImageUpload(file)
         .then((res) => {
-          target === 'mainImage'
-            ? (productData.value.imageUrl = res.data.imageUrl)
-            : productData.value.imagesUrl.push(res.data.imageUrl);
+          if (target === 'mainImage') {
+            productData.value.imageUrl = res.data.imageUrl;
+          } else {
+            productData.value.imagesUrl.push(res.data.imageUrl);
+          }
           console.log(res.data);
         })
         .catch((err) => {
@@ -62,8 +67,7 @@ export default {
     }
 
     return {
-      selectType: computed(() => state.modalType),
-      closeModal,
+      selectType: computed(() => functionSelected.selected),
       productData,
       imageFile,
       handleResetFormInput,
@@ -84,7 +88,7 @@ export default {
     <form class="p-4 space-y-4 container" @submit.prevent="handleProductAddition">
       <div class="flex space-between gap-4">
         <div class="flex-auto">
-          <label for="productName" class="block mb-4">產品名稱</label>
+          <label for="productName" class="block mb-4">產品名稱
           <input
             type="text"
             id="productName"
@@ -93,9 +97,10 @@ export default {
             v-model="productData.title"
             required
           />
+          </label>
         </div>
         <div class="flex-auto">
-          <label for="productContent" class="block mb-4">產品說明</label>
+          <label for="productContent" class="block mb-4">產品說明
           <input
             type="text"
             id="productContent"
@@ -104,9 +109,10 @@ export default {
             v-model="productData.content"
             required
           />
+          </label>
         </div>
         <div class="flex-auto">
-          <label for="productCategory" class="block mb-4">產品類別</label>
+          <label for="productCategory" class="block mb-4">產品類別
           <select
             class="rounded w-full"
             id="productCategory"
@@ -119,28 +125,33 @@ export default {
             <option value="裙類">裙類</option>
             <option value="鞋類">鞋類</option>
           </select>
+          </label>
         </div>
         <div class="flex-auto">
-          <label for="productRating" class="block mb-4">產品星級</label>
+          <label for="productRating" class="block mb-4">產品星級
           <select class="rounded w-full" id="productRating" required v-model="productData.rating">
             <option v-for="star in 5" :value="star" :key="star + new Date()">{{ star }}星</option>
           </select>
+          </label>
         </div>
       </div>
       <div class="flex space-between gap-4">
         <div class="flex-auto">
           <div class="flex justify-between gap-2">
             <div class="flex-1">
-              <label for="productMainImage" class="block mb-4">產品主圖片</label>
+              <label for="productMainImage" class="block mb-4">產品主圖片
               <input
                 type="file"
                 accept="image/*"
                 id="productImages"
                 name="productImages"
                 ref="imageFile"
-                class="rounded block w-full text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-secondary-100 file:text-secondary-700 hover:file:bg-secondary-300"
+                class="rounded block w-full text-gray-400 file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0 file:text-sm file:bg-secondary-100
+                file:text-secondary-700 hover:file:bg-secondary-300"
                 @change="handleGetImageUrl('mainImage')"
               />
+              </label>
             </div>
             <img
               class="max-h-48 object-cover flex-auto"
@@ -152,20 +163,23 @@ export default {
         </div>
       </div>
       <div>
-        <label for="productImages" class="block mb-4">產品附屬圖片</label>
+        <label for="productImages" class="block mb-4">產品附屬圖片
         <input
           type="file"
           accept="image/*"
           id="productImages"
           name="productImages"
           ref="imageFile"
-          class="rounded block w-full text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:bg-secondary-100 file:text-secondary-700 hover:file:bg-secondary-300"
+          class="rounded block w-full text-gray-400 file:mr-4 file:py-2 file:px-4
+          file:rounded-full file:border-0 file:text-sm file:bg-secondary-100
+          file:text-secondary-700 hover:file:bg-secondary-300"
           @change="handleGetImageUrl()"
         />
+        </label>
       </div>
       <ul class="flex justify-between gap-2">
         <li class="flex-auto" v-for="(item, idx) in productData.imagesUrl" :key="item + idx">
-          <input type="text" v-model="productData.imagesUrl[idx]" class="rounded w-full" />
+          <!-- <input type="text" v-model="productData.imagesUrl[idx]" class="rounded w-full" /> -->
           <div class="relative">
             <img
               class="object-cover max-h-48 w-max rounded-xl"
@@ -192,17 +206,18 @@ export default {
         </li>
       </ul>
       <div class="">
-        <label for="productDescription" class="block mb-4">產品描述</label>
+        <label for="productDescription" class="block mb-4">產品描述
         <textarea
           id="productDescription"
           name="productDescription"
           class="rounded w-full"
           v-model="productData.description"
         />
+        </label>
       </div>
       <div class="flex space-between gap-4">
         <div class="flex-auto">
-          <label for="productIsEnable" class="block mb-4">產品啟用狀態</label>
+          <label for="productIsEnable" class="block mb-4">產品啟用狀態
           <select
             class="rounded w-full"
             id="productIsEnable"
@@ -214,9 +229,10 @@ export default {
             <option value="2">未上架</option>
             <option value="3">已下架</option>
           </select>
+          </label>
         </div>
         <div class="flex-auto">
-          <label for="productOriginPrice" class="block mb-4">產品原價</label>
+          <label for="productOriginPrice" class="block mb-4">產品原價
           <input
             type="text"
             id="productOriginPrice"
@@ -224,9 +240,10 @@ export default {
             class="rounded w-full"
             v-model.number="productData.origin_price"
           />
+          </label>
         </div>
         <div class="flex-auto">
-          <label for="productPrice" class="block mb-4">產品最終價格</label>
+          <label for="productPrice" class="block mb-4">產品最終價格
           <input
             type="text"
             id="productPrice"
@@ -235,9 +252,10 @@ export default {
             required
             v-model.number="productData.price"
           />
+          </label>
         </div>
         <div class="flex-auto">
-          <label for="productUnit" class="block mb-4">產品品項單位</label>
+          <label for="productUnit" class="block mb-4">產品品項單位
           <input
             type="text"
             id="productUnit"
@@ -245,17 +263,20 @@ export default {
             class="rounded w-full"
             v-model="productData.unit"
           />
+          </label>
         </div>
       </div>
       <div class="flex justify-between gap-4">
         <button
-          class="flex-auto py-2 bg-success-500 text-white hover:bg-success-600 hover:shadow hover:shadow-success-400 transition duration-300 rounded-md"
+          class="flex-auto py-2 bg-success-500 text-white hover:bg-success-600
+          hover:shadow hover:shadow-success-400 transition duration-300 rounded-md"
           type="submit"
         >
           {{ selectType === 'productEdit' ? '確定修改' : '新增產品' }}
         </button>
         <button
-          class="flex-auto py-2 bg-gray-500 text-white hover:bg-gray-600 hover:shadow hover:shadow-gray-400 transition duration-300 rounded-md"
+          class="flex-auto py-2 bg-gray-500 text-white hover:bg-gray-600
+          hover:shadow hover:shadow-gray-400 transition duration-300 rounded-md"
           @click="handleResetFormInput()"
           type="reset"
         >

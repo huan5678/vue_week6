@@ -4,13 +4,5 @@ export default {
 };
 </script>
 <template>
-  <main>
-    <router-view v-slot="{ Component }">
-      <transition name="fade">
-        <keep-alive>
-          <component :is="Component" />
-        </keep-alive>
-      </transition>
-    </router-view>
-  </main>
+  <router-view />
 </template>

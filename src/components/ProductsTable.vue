@@ -4,11 +4,12 @@ import { useRouter } from 'vue-router';
 import useStore from '@/stores';
 
 export default {
-  setup() {
+  setup(props, context) {
     const { adminStore, adminProductStore } = useStore();
     const { handleSetLogout, handleClearToken } = adminStore;
-    const { productList, handleGetProductList, functionSelected, handleSelectFunction } =
-      adminProductStore;
+    const {
+      productList, handleGetProductList, functionSelected, handleSelectFunction,
+    } = adminProductStore;
     const router = useRouter();
     const tempProduct = ref({
       title: '',
@@ -29,18 +30,23 @@ export default {
       router.push('/');
     }
 
+    function openModal(selected, item) {
+      context.attrs.handleOpenModal(true);
+      handleSelectFunction(selected, item);
+    }
+
     onMounted(() => {
       handleGetProductList();
       // handleGetProductAll();
+      console.log(context.attrs);
     });
     return {
       productList: computed(() => productList),
-      openModal,
       tempProduct,
       handleIsLogout,
       handleGetProductList,
       functionSelected: computed(() => functionSelected),
-      handleSelectFunction,
+      openModal,
     };
   },
 };
@@ -51,7 +57,8 @@ export default {
       <h2 class="text-4xl font-medium">產品列表</h2>
       <h2 class="ml-auto text-xl">管理者登出</h2>
       <button
-        class="rounded bg-danger-500 px-6 py-2 text-white transition duration-300 hover:bg-danger-600 hover:shadow hover:shadow-danger-400"
+        class="rounded bg-danger-500 px-6 py-2 text-white transition
+        duration-300 hover:bg-danger-600 hover:shadow hover:shadow-danger-400"
         @click="handleIsLogout()"
       >
         登出
@@ -75,12 +82,8 @@ export default {
           :key="item.id"
         >
           <td class="whitespace-nowrap py-2 px-4">{{ item.title }}</td>
-          <td class="whitespace-nowrap py-2 px-4 text-right">
-            {{ item.origin_price }}
-          </td>
-          <td class="whitespace-nowrap py-2 px-4 text-right">
-            {{ item.price }}
-          </td>
+          <td class="whitespace-nowrap py-2 px-4 text-right">{{ item.origin_price }}</td>
+          <td class="whitespace-nowrap py-2 px-4 text-right">{{ item.price }}</td>
           <td
             class="whitespace-nowrap py-2 px-4 text-center text-primary-400"
             v-if="item.is_enabled == 1"
@@ -109,8 +112,9 @@ export default {
           <td class="whitespace-nowrap py-2 px-4 text-center">
             <button
               type="button"
-              class="rounded bg-primary-500 py-2 px-4 text-white transition duration-200 hover:bg-primary-600 hover:shadow hover:shadow-primary-400"
-              @click="handleSelectFunction('getDetail', item)"
+              class="rounded bg-primary-500 py-2 px-4 text-white transition duration-200
+              hover:bg-primary-600 hover:shadow hover:shadow-primary-400"
+              @click="openModal('getDetail', item)"
             >
               查看細節
             </button>
@@ -118,8 +122,9 @@ export default {
           <td class="whitespace-nowrap py-2 px-4 text-center">
             <button
               type="button"
-              class="rounded bg-secondary-700 py-2 px-4 text-white transition duration-200 hover:bg-secondary-800 hover:shadow hover:shadow-secondary-400"
-              @click="handleSelectFunction('productEdit', item)"
+              class="rounded bg-secondary-700 py-2 px-4 text-white transition duration-200
+              hover:bg-secondary-800 hover:shadow hover:shadow-secondary-400"
+              @click="openModal('productEdit', item)"
             >
               修改內容
             </button>
@@ -127,8 +132,9 @@ export default {
           <td class="whitespace-nowrap py-2 px-4 text-center">
             <button
               type="button"
-              class="rounded bg-danger-500 py-2 px-4 text-white transition duration-200 hover:bg-danger-600 hover:shadow hover:shadow-danger-400"
-              @click="handleSelectFunction('productDelete', item)"
+              class="rounded bg-danger-500 py-2 px-4 text-white transition duration-200
+              hover:bg-danger-600 hover:shadow hover:shadow-danger-400"
+              @click="openModal('productDelete', item)"
             >
               刪除品項
             </button>
@@ -140,8 +146,9 @@ export default {
       <p>目前有{{ productList.products.length }}項產品</p>
       <button
         type="button"
-        class="rounded bg-warning-500 py-2 px-4 text-white transition duration-200 hover:bg-warning-600 hover:shadow hover:shadow-warning-400"
-        @click="handleSelectFunction('productCreate', tempProduct)"
+        class="rounded bg-warning-500 py-2 px-4 text-white transition duration-200
+        hover:bg-warning-600 hover:shadow hover:shadow-warning-400"
+        @click="openModal('productCreate', tempProduct)"
       >
         新增品項
       </button>
@@ -149,10 +156,11 @@ export default {
     <!-- 分頁 -->
     <div>
       <ul class="flex items-center justify-center gap-2">
-        <li class="">
+        <li class>
           <button
             type="button"
-            class="rounded border border-primary-500 p-2 text-primary-500 disabled:border-gray-400 disabled:text-gray-500"
+            class="rounded border border-primary-500 p-2 text-primary-500
+            disabled:border-gray-400 disabled:text-gray-500"
             :disabled="!productList.pagination.has_pre"
             @click="handleGetProductList(productList.pagination.current_page - 1)"
           >
@@ -161,12 +169,13 @@ export default {
               width="16"
               height="16"
               fill="currentColor"
-              class=""
+              class
               viewBox="0 0 16 16"
             >
               <path
                 fill-rule="evenodd"
-                d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
+                d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1
+                0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
               />
             </svg>
           </button>
@@ -183,10 +192,11 @@ export default {
             {{ page }}
           </button>
         </li>
-        <li class="">
+        <li class>
           <button
             type="button"
-            class="rounded border border-primary-500 p-2 text-primary-500 disabled:border-gray-400 disabled:text-gray-500"
+            class="rounded border border-primary-500 p-2 text-primary-500
+            disabled:border-gray-400 disabled:text-gray-500"
             :disabled="!productList.pagination.has_next"
             @click="handleGetProductList(productList.pagination.current_page + 1)"
           >
@@ -195,12 +205,13 @@ export default {
               width="16"
               height="16"
               fill="currentColor"
-              class=""
+              class
               viewBox="0 0 16 16"
             >
               <path
                 fill-rule="evenodd"
-                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+                d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0
+                .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
               />
             </svg>
           </button>

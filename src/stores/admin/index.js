@@ -1,15 +1,18 @@
 import { ref, inject } from 'vue';
 import { defineStore } from 'pinia';
+import axios from 'axios';
 
 export const useAdminStore = defineStore('admin', () => {
-  const axios = inject('axios');
+  const vueAxios = inject('axios');
   const baseUrl = process.env.VUE_APP_API_URL;
   const token = ref('');
   const expired = ref('');
   const isLoggedIn = ref(false);
 
   function handleCheckUser() {
-    axios.post(`${baseUrl}api/user/check`, { token: token.value })
+    axios.defaults.headers.common.Authorization = token.value;
+    vueAxios
+      .post(`${baseUrl}api/user/check`)
       .then((res) => {
         isLoggedIn.value = res.data.success;
         return res.data.success;
@@ -23,7 +26,12 @@ export const useAdminStore = defineStore('admin', () => {
 
   function handleGetToken() {
     const cookies = document.cookie.split('; backendToken=');
-    token.value = cookies.pop().split(';').shift();
+    const cookie2 = cookies.shift().split(';');
+    cookie2.forEach((c) => {
+      if (c.trim().startsWith('backendToken=')) {
+        token.value = c.trim().split('=')['1'];
+      }
+    });
     return cookies;
   }
 
@@ -31,15 +39,13 @@ export const useAdminStore = defineStore('admin', () => {
     token.value = data.token;
     expired.value = data.expired;
     isLoggedIn.value = true;
-    document.cookie = `backendToken=${data.token}; expires=${new Date(
-      data.expired,
-    )};`;
+    document.cookie = `backendToken=${data.token}; expires=${new Date(data.expired)};`;
   }
   function handleSetLogout() {
     isLoggedIn.value = false;
     token.value = '';
     expired.value = '';
-    axios.post(`${baseUrl}api/user/logout`);
+    vueAxios.post(`${baseUrl}api/user/logout`);
   }
 
   function handleClearToken() {

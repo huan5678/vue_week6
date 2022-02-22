@@ -1,5 +1,5 @@
 <script>
-import { onBeforeMount, ref } from 'vue';
+import { onBeforeMount, ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { $vfm } from 'vue-final-modal';
 
@@ -17,15 +17,15 @@ export default {
     ModalCardAddition,
   },
   setup() {
-    const { adminStore } = useStore();
+    const { adminStore, adminProductStore } = useStore();
     const { handleCheckUser, handleGetToken } = adminStore;
 
     const router = useRouter();
     const isOpenModal = ref(false);
 
-    function handleOpenModal(id) {
-      isOpenModal.value = true;
-      $vfm.show(id);
+    function handleOpenModal(boolean = true) {
+      isOpenModal.value = boolean;
+      $vfm.show('adminModal');
     }
 
     onBeforeMount(() => {
@@ -37,6 +37,8 @@ export default {
 
     return {
       handleOpenModal,
+      isOpenModal,
+      modalState: computed(() => adminProductStore.functionSelected.selected),
     };
   },
 };
@@ -45,18 +47,19 @@ export default {
 <template>
   <main class="bg-gray-100">
     <div class="container">
-      <ProductsTable handleOpenModal="handleOpenModal" />
+      <ProductsTable :handleOpenModal="handleOpenModal" />
       <vue-final-modal
         v-model="isOpenModal"
+        id="adminModal"
         classes="flex justify-center items-center bg-opacity-50 backdrop-blur-[2px]"
         content-class="bg-gray-50 rounded-md shadow-md overflow-hidden"
         focus-trap
       >
-        <ModalCardDelete v-if="modalState === 'productDelete'" />
-        <ModalCardDetail v-if="modalState === 'getDetail'" />
+        <ModalCardDelete v-if="modalState === 'productDelete'" :handleOpenModal="handleOpenModal" />
+        <ModalCardDetail v-if="modalState === 'getDetail'" :handleOpenModal="handleOpenModal" />
         <ModalCardAddition
           v-if="modalState === 'productEdit' || modalState === 'productCreate'"
-          :products="products"
+          :handleOpenModal="handleOpenModal"
         />
       </vue-final-modal>
     </div>

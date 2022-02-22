@@ -29,7 +29,7 @@ const routes = [
     component: () => import('@/views/BackEndView.vue'),
     children: [
       {
-        path: '/',
+        path: '',
         name: 'dashboard',
         component: () => import('@/views/DashboardView.vue'),
       },

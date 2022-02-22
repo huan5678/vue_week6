@@ -32,7 +32,9 @@ export default {
 
     onMounted(() => {
       const cookieToken = handleGetToken();
-      if (cookieToken[0] !== '') router.push('/admin');
+      if (cookieToken[0] !== '' && cookieToken[0] !== undefined) {
+        router.push('/admin');
+      }
     });
 
     return {
