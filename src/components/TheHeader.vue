@@ -10,7 +10,7 @@ export default {
     <h2>
       <AppLink to="/"> LOGO </AppLink>
     </h2>
-    <ul class="flex justify-between items-center gap-4">
+    <ul class="flex gap-4 justify-between items-center">
       <li>
         <AppLink to="product"> 產品列表 </AppLink>
       </li>

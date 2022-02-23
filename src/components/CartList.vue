@@ -43,30 +43,30 @@ export default {
 </script>
 
 <template>
-  <section class="bg-gray-light pt-12 pb-18">
-    <h2 class="text-center text-2xl mb-8">購物車</h2>
+  <section class="pt-12 bg-gray-100 pb-20">
+    <h2 class="mb-8 text-2xl text-center">購物車</h2>
     <table class="container">
       <thead class="border-b-2 border-secondary-700">
         <tr>
-          <th class="text-xl font-normal text-left w-4/12">品項</th>
-          <th class="text-xl font-normal text-right w-2/12">單價</th>
-          <th class="text-xl font-normal text-right w-2/12">數量</th>
-          <th class="text-xl font-normal text-right w-2/12">金額</th>
+          <th class="w-4/12 text-xl font-normal text-left">品項</th>
+          <th class="w-2/12 text-xl font-normal text-right">單價</th>
+          <th class="w-2/12 text-xl font-normal text-right">數量</th>
+          <th class="w-2/12 text-xl font-normal text-right">金額</th>
           <th class="w-2/12"></th>
         </tr>
       </thead>
-      <tbody class="text-xl font-normal mb-5">
+      <tbody class="mb-5 text-xl font-normal">
         <tr class="border-b" v-for="cart in cartList" :key="cart.id">
           <td class="flex gap-4 items-center py-5">
             <img
-              class="h-20 w-20 object-cover"
+              class="object-cover w-20 h-20"
               :src="cart.product.imageUrl"
               :alt="cart.product.title"
             />
             <h3>{{ cart.product.title }}</h3>
           </td>
           <td class="text-right">
-            <span class="block line-through text-sm">
+            <span class="block text-sm line-through">
               NT${{ moneyFormat(cart.product.origin_price) }}
             </span>
             NT${{ moneyFormat(cart.product.price) }}
@@ -83,7 +83,7 @@ export default {
             </select>
           </td>
           <td class="text-right">
-            <span class="block line-through text-sm">
+            <span class="block text-sm line-through">
               NT${{ moneyFormat(cart.product.origin_price, cart.qty) }}
             </span>
             NT${{ moneyFormat(cart.product.price, cart.qty) }}
@@ -92,7 +92,8 @@ export default {
             <button class="" @click="handleDeleteCart(cart.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6 transition duration-500 ease-out hover:text-primary hover:scale-150"
+                class="w-6 h-6 transition duration-500 ease-out
+                hover:scale-150 hover:text-primary-500"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -112,21 +113,21 @@ export default {
         <tr>
           <td colSpan="3" class="py-5">
             <button
-              class="rounded py-2 px-5 border border-black transition duration-300 ease-in-out
-              hover:bg-black hover:border-transparent hover:text-white"
+              class="py-2 px-5 hover:text-white hover:bg-black rounded border border-black
+              hover:border-transparent transition duration-300 ease-in-out"
               @click="handleClearCart"
               v-if="cartList.length > 0"
             >
               刪除全部品項
             </button>
-            <p v-else class="text-left pl-12 pt-3 text-primary">您的購物車是空的</p>
+            <p v-else class="pt-3 pl-12 text-left text-primary">您的購物車是空的</p>
           </td>
           <td class="text-center" v-show="cartList.length > 0">
-            <span class="block line-through text-sm">原始總金額</span>
+            <span class="block text-sm line-through">原始總金額</span>
             總金額
           </td>
           <td class="text-center" v-show="cartList.length > 0">
-            <span class="block line-through text-sm"> NT${{ cartTotalPrice }} </span>
+            <span class="block text-sm line-through"> NT${{ cartTotalPrice }} </span>
             NT${{ cartFinalPrice }}
           </td>
         </tr>

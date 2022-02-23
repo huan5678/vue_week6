@@ -35,68 +35,70 @@ export default {
 </script>
 
 <template>
-  <div class="cursor-pointer group h-full"
-  @click="handleOpenProductModal"
-  @keydown="handleOpenProductModal">
-    <div class="overflow-clip">
-      <img
-        :src="products.imageUrl"
-        :alt="products.title"
-        class="w-full object-cover transition-all duration-700 ease-out group-hover:scale-110"
-      />
+  <div class="flex flex-col justify-between rounded-md shadow
+  overflow-hidden relative h-full">
+    <div class="group cursor-pointer h-full"
+    @click="handleOpenProductModal"
+    @keydown="handleOpenProductModal">
+      <div class="overflow-clip">
+        <img
+          :src="products.imageUrl"
+          :alt="products.title"
+          class="object-cover w-full transition-all duration-700 ease-out group-hover:scale-110"
+        />
+      </div>
+      <ul class="p-4 space-y-4">
+        <li>
+          <h2 class="text-xl text-center">{{ products.title }}</h2>
+        </li>
+        <li class="flex justify-between">
+          <span>原價</span>
+          <span class="line-through">
+            {{ products.origin_price }}
+          </span>
+        </li>
+        <li class="flex justify-between">
+          <span>特價</span>
+          <span class="text-xl">{{ products.price }}</span>
+        </li>
+      </ul>
     </div>
-    <ul class="p-4 space-y-4">
-      <li>
-        <h2 class="text-xl text-center">{{ products.title }}</h2>
-      </li>
-      <li class="flex justify-between">
-        <span>原價</span>
-        <span class="line-through">
-          {{ products.origin_price }}
-        </span>
-      </li>
-      <li class="flex justify-between">
-        <span>特價</span>
-        <span class="text-xl">{{ products.price }}</span>
-      </li>
-    </ul>
-  </div>
-  <div class="overflow-clip">
-    <button
-      type="button"
-      class="w-full bg-secondary-700 text-gray-50 flex justify-center items-center
-      gap-2 text-xl py-4 transition-all duration-500 ease-in-out
-      hover:scale-110 hover:bg-secondary-900"
-      :class="isLoading === products.id ? 'bg-gray-300 hover:bg-gray-300' : ''"
-      :disabled="isLoading === products.id"
-      @click="handleAddCart(products.id)"
-    >
-      <svg
-        class="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-300"
-        :class="isLoading === products.id ? '' : 'hidden'"
+    <div class="overflow-clip flex-[1_0_auto]">
+      <button
+        type="button"
+        class="flex gap-2 justify-center items-center py-4 w-full
+        text-xl text-gray-50 bg-secondary-700 hover:bg-secondary-900 transition-all duration-500
+        ease-in-out hover:scale-110"
+        :class="isLoading === products.id ? 'bg-gray-300 hover:bg-gray-300' : ''"
         :disabled="isLoading === products.id"
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
+        @click="handleAddCart(products.id)"
       >
-        <circle
-          class="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          stroke-width="4"
-        ></circle>
-        <path
-          class="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962
-          7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-        ></path>
-      </svg>
-
-      加入購物車
-    </button>
+        <svg
+          class="mr-3 -ml-1 w-5 h-5 text-gray-300 animate-spin"
+          :class="isLoading === products.id ? '' : 'hidden'"
+          :disabled="isLoading === products.id"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962
+            7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
+        </svg>
+        加入購物車
+      </button>
+    </div>
   </div>
   <vue-final-modal
     v-model="isOpenModal"
@@ -105,18 +107,18 @@ export default {
     content-class="bg-gray-50 rounded-md shadow-md overflow-hidden"
     focus-trap
   >
-    <div class="bg-gray-900 flex justify-between items-center space-y-3">
-      <h2 class="text-white text-lg p-4">{{ products.title }}</h2>
+    <div class="flex justify-between items-center space-y-3 bg-gray-900">
+      <h2 class="p-4 text-lg text-white">{{ products.title }}</h2>
       <button
         type="button"
-        class="text-gray-50 p-4 transition-all duration-200 ease-in-out
-        hover:text-gray-100 hover:scale-125"
+        class="p-4 text-gray-50 hover:text-gray-100 transition-all duration-200
+        ease-in-out hover:scale-125"
         @click="isOpenModal = false"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
-          class="bi bi-x h-8 w-8"
+          class="w-8 h-8 bi bi-x"
           viewBox="0 0 16 16"
         >
           <path
@@ -128,7 +130,7 @@ export default {
       </button>
     </div>
     <section
-      class="flex flex-col overflow-hidden space-y-4 bg-gray-50 rounded-md pb-4"
+      class="flex overflow-hidden flex-col pb-4 space-y-4 bg-gray-50 rounded-md"
     >
       <div class="flex justify-between p-4">
         <img
@@ -136,23 +138,23 @@ export default {
           :src="products.imageUrl"
           :alt="products.title"
         />
-        <div class="p-4 flex-1 space-y-8">
-          <div class="flex items-center gap-4">
-            <h2 class="font-bold text-xl mb-2">
+        <div class="flex-1 p-4 space-y-8">
+          <div class="flex gap-4 items-center">
+            <h2 class="mb-2 text-xl font-bold">
               {{ products.title }}
               <span
-                class="px-2 py-1 ml-2 rounded text-sm bg-primary-400 text-white"
+                class="py-1 px-2 ml-2 text-sm text-white bg-primary-400 rounded"
               >
                 {{ products.category }}
               </span>
             </h2>
-            <ul class="flex items-center gap-1">
+            <ul class="flex gap-1 items-center">
               <li v-for="(star, idx) in 5" :key="star + new Date()">
                 <svg
                   v-show="products.rating > idx"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="h-6 w-6 text-warning-500"
+                  class="w-6 h-6 text-warning-500"
                   viewBox="0 0 16 16"
                 >
                   <path
@@ -166,7 +168,7 @@ export default {
                   v-show="products.rating <= idx"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="currentColor"
-                  class="h-6 w-6 text-gray-400"
+                  class="w-6 h-6 text-gray-400"
                   viewBox="0 0 16 16"
                 >
                   <path
@@ -194,7 +196,7 @@ export default {
               }}</span>
               個 / 元
             </li>
-            <li class="flex flex-col justify-between gap-4">
+            <li class="flex flex-col gap-4 justify-between">
               <select v-model="qty" class="w-1/2">
                 <option value="0" selected disabled>請選擇訂購數量</option>
                 <option v-for="i in 20" :value="i" :key="i + products.id">
@@ -202,7 +204,7 @@ export default {
                 </option>
               </select>
               <button
-                class="w-full flex justify-center items-center py-3 rounded
+                class="flex justify-center items-center py-3 w-full rounded
                 border border-danger-700 transition duration-300"
                 @click="handleUpdateCart(products.id, qty)"
                 :disabled="qty === 0"
@@ -213,7 +215,7 @@ export default {
                 "
               >
                 <svg
-                  class="animate-spin -ml-1 mr-3 h-5 w-5 text-danger-50"
+                  class="mr-3 -ml-1 w-5 h-5 text-danger-50 animate-spin"
                   :class="isLoading === products.id ? '' : 'hidden'"
                   :disabled="isLoading === products.id"
                   xmlns="http://www.w3.org/2000/svg"
@@ -242,11 +244,11 @@ export default {
           </ul>
         </div>
       </div>
-      <div class="flex gap-4 overflow-x-auto">
+      <div class="flex overflow-x-auto gap-4">
         <img
           v-for="img in products.imagesUrl"
           :key="img"
-          class="max-h-48 w-1/12 object-cover flex-auto"
+          class="object-cover flex-auto w-1/12 max-h-48"
           :src="img"
           :alt="products.title"
         />

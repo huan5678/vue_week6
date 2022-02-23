@@ -6,19 +6,22 @@ import ModalCardTitle from './ModalCardTitle.vue';
 export default {
   components: { ModalCardTitle },
   props: { products: Object },
-  setup(props) {
+  setup(props, context) {
     const { adminProductStore } = useStore();
     const {
-      handleEditProduct, handleCreateProduct,
-      handleImageUpload, functionSelected,
+      handleEditProduct, handleCreateProduct, handleImageUpload, functionSelected, productList,
     } = adminProductStore;
 
     const productData = computed({
-      get: () => ({ ...props.products }),
+      get: () => ({ ...productList.tempProduct }),
       set: (val) => val,
     });
 
     const imageFile = ref(null);
+
+    function closeModal() {
+      context.attrs.handleOpenModal(false);
+    }
 
     function handleResetFormInput() {
       productData.value = {
@@ -33,6 +36,7 @@ export default {
         imageUrl: '',
         imagesUrl: [],
       };
+      closeModal();
     }
 
     function handleProductAddition() {
@@ -74,87 +78,90 @@ export default {
       handleProductAddition,
       handleGetImageUrl,
       handleRemoveImageArr,
+      handleOpenModal: context.attrs.handleOpenModal,
+      closeModal,
     };
   },
 };
 </script>
 
 <template>
-  <section class="flex flex-col overflow-hidden space-y-4 bg-gray-50 rounded-md pb-4">
+  <section class="flex overflow-hidden flex-col pb-4 space-y-4 bg-gray-50 rounded-md">
     <ModalCardTitle
       :title="selectType === 'productEdit' ? '內容編輯' : '新增產品'"
-      :close-modal="closeModal"
+      :close-modal="handleOpenModal"
     />
-    <form class="p-4 space-y-4 container" @submit.prevent="handleProductAddition">
-      <div class="flex space-between gap-4">
+    <form class="container p-4 space-y-4" @submit.prevent="handleProductAddition">
+      <div class="flex gap-4 justify-between">
         <div class="flex-auto">
-          <label for="productName" class="block mb-4">產品名稱
-          <input
-            type="text"
-            id="productName"
-            name="productName"
-            class="rounded w-full"
-            v-model="productData.title"
-            required
-          />
-          </label>
+          <label for="productName" class="block mb-4"
+            >產品名稱</label>
+            <input
+              type="text"
+              id="productName"
+              name="productName"
+              class="w-full rounded"
+              v-model="productData.title"
+              required
+            />
         </div>
         <div class="flex-auto">
-          <label for="productContent" class="block mb-4">產品說明
-          <input
-            type="text"
-            id="productContent"
-            name="productContent"
-            class="rounded w-full"
-            v-model="productData.content"
-            required
-          />
-          </label>
+          <label for="productContent" class="block mb-4"
+            >產品說明</label>
+            <input
+              type="text"
+              id="productContent"
+              name="productContent"
+              class="w-full rounded"
+              v-model="productData.content"
+              required
+            />
         </div>
         <div class="flex-auto">
-          <label for="productCategory" class="block mb-4">產品類別
-          <select
-            class="rounded w-full"
-            id="productCategory"
-            required
-            v-model="productData.category"
-          >
-            <option value="測試分類">測試分類</option>
-            <option value="上衣類">上衣類</option>
-            <option value="褲類">褲類</option>
-            <option value="裙類">裙類</option>
-            <option value="鞋類">鞋類</option>
-          </select>
-          </label>
+          <label for="productCategory" class="block mb-4"
+            >產品類別</label>
+            <select
+              class="w-full rounded"
+              id="productCategory"
+              required
+              v-model="productData.category"
+            >
+              <option value="測試分類">測試分類</option>
+              <option value="上衣類">上衣類</option>
+              <option value="褲類">褲類</option>
+              <option value="裙類">裙類</option>
+              <option value="鞋類">鞋類</option>
+            </select>
         </div>
         <div class="flex-auto">
-          <label for="productRating" class="block mb-4">產品星級
-          <select class="rounded w-full" id="productRating" required v-model="productData.rating">
-            <option v-for="star in 5" :value="star" :key="star + new Date()">{{ star }}星</option>
-          </select>
-          </label>
+          <label for="productRating" class="block mb-4"
+            >產品星級</label>
+            <select class="w-full rounded" id="productRating" required v-model="productData.rating">
+              <option v-for="star in 5" :value="star" :key="star + new Date()">{{ star }}星</option>
+            </select>
         </div>
       </div>
-      <div class="flex space-between gap-4">
+      <div class="flex gap-4 justify-between">
         <div class="flex-auto">
-          <div class="flex justify-between gap-2">
+          <div class="flex gap-2 justify-between">
             <div class="flex-1">
-              <label for="productMainImage" class="block mb-4">產品主圖片
-              <input
-                type="file"
-                accept="image/*"
-                id="productImages"
-                name="productImages"
-                ref="imageFile"
-                class="rounded block w-full text-gray-400 file:mr-4 file:py-2 file:px-4
-                file:rounded-full file:border-0 file:text-sm file:bg-secondary-100
-                file:text-secondary-700 hover:file:bg-secondary-300"
-                @change="handleGetImageUrl('mainImage')"
-              />
-              </label>
+              <label for="productMainImage" class="block mb-4"
+                >產品主圖片</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="productImages"
+                  name="productImages"
+                  ref="imageFile"
+                  class="block file:py-2 file:px-4 file:mr-4 w-full
+                  file:text-sm text-gray-400 file:text-secondary-700
+                  file:bg-secondary-100 hover:file:bg-secondary-300 rounded file:rounded-full
+                  file:border-0"
+                  @change="handleGetImageUrl('mainImage')"
+                />
             </div>
             <img
-              class="max-h-48 object-cover flex-auto"
+              class="object-cover flex-auto max-h-48"
               v-if="productData.imageUrl"
               :src="productData.imageUrl"
               alt="產品主圖"
@@ -163,38 +170,38 @@ export default {
         </div>
       </div>
       <div>
-        <label for="productImages" class="block mb-4">產品附屬圖片
-        <input
-          type="file"
-          accept="image/*"
-          id="productImages"
-          name="productImages"
-          ref="imageFile"
-          class="rounded block w-full text-gray-400 file:mr-4 file:py-2 file:px-4
-          file:rounded-full file:border-0 file:text-sm file:bg-secondary-100
-          file:text-secondary-700 hover:file:bg-secondary-300"
-          @change="handleGetImageUrl()"
-        />
-        </label>
+        <label for="productImages" class="block mb-4"
+          >產品附屬圖片</label>
+          <input
+            type="file"
+            accept="image/*"
+            id="productImages"
+            name="productImages"
+            ref="imageFile"
+            class="block file:py-2 file:px-4 file:mr-4 w-full file:text-sm
+            text-gray-400 file:text-secondary-700 file:bg-secondary-100
+            hover:file:bg-secondary-300 rounded file:rounded-full file:border-0"
+            @change="handleGetImageUrl()"
+          />
       </div>
-      <ul class="flex justify-between gap-2">
+      <ul class="flex gap-2 justify-between">
         <li class="flex-auto" v-for="(item, idx) in productData.imagesUrl" :key="item + idx">
           <!-- <input type="text" v-model="productData.imagesUrl[idx]" class="rounded w-full" /> -->
           <div class="relative">
             <img
-              class="object-cover max-h-48 w-max rounded-xl"
+              class="object-cover w-max max-h-48 rounded-xl"
               v-if="item !== ''"
               :src="item"
               alt="附屬圖片"
             />
             <button
-              class="absolute top-0 right-0 text-secondary-100 p-4"
+              class="absolute top-0 right-0 p-4 text-secondary-100"
               type="button"
               @click="handleRemoveImageArr(idx)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="h-8 w-8"
+                class="w-8 h-8"
                 fill="currentColor"
                 viewBox="0 0 16 16"
               >
@@ -206,77 +213,78 @@ export default {
         </li>
       </ul>
       <div class="">
-        <label for="productDescription" class="block mb-4">產品描述
-        <textarea
-          id="productDescription"
-          name="productDescription"
-          class="rounded w-full"
-          v-model="productData.description"
-        />
-        </label>
+        <label for="productDescription" class="block mb-4"
+          >產品描述</label>
+          <textarea
+            id="productDescription"
+            name="productDescription"
+            class="w-full rounded"
+            v-model="productData.description"
+          />
       </div>
-      <div class="flex space-between gap-4">
+      <div class="flex gap-4 justify-between">
         <div class="flex-auto">
-          <label for="productIsEnable" class="block mb-4">產品啟用狀態
-          <select
-            class="rounded w-full"
-            id="productIsEnable"
-            required
-            v-model="productData.is_enabled"
-          >
-            <option value="0">未啟用</option>
-            <option value="1">啟用</option>
-            <option value="2">未上架</option>
-            <option value="3">已下架</option>
-          </select>
-          </label>
+          <label for="productIsEnable" class="block mb-4"
+            >產品啟用狀態</label>
+            <select
+              class="w-full rounded"
+              id="productIsEnable"
+              required
+              v-model="productData.is_enabled"
+            >
+              <option value="0">未啟用</option>
+              <option value="1">啟用</option>
+              <option value="2">未上架</option>
+              <option value="3">已下架</option>
+            </select>
         </div>
         <div class="flex-auto">
-          <label for="productOriginPrice" class="block mb-4">產品原價
-          <input
-            type="text"
-            id="productOriginPrice"
-            name="productOriginPrice"
-            class="rounded w-full"
-            v-model.number="productData.origin_price"
-          />
-          </label>
+          <label for="productOriginPrice" class="block mb-4"
+            >產品原價</label>
+            <input
+              type="text"
+              id="productOriginPrice"
+              name="productOriginPrice"
+              class="w-full rounded"
+              v-model.number="productData.origin_price"
+            />
         </div>
         <div class="flex-auto">
-          <label for="productPrice" class="block mb-4">產品最終價格
-          <input
-            type="text"
-            id="productPrice"
-            name="productPrice"
-            class="rounded w-full"
-            required
-            v-model.number="productData.price"
-          />
-          </label>
+          <label for="productPrice" class="block mb-4"
+            >產品最終價格</label>
+            <input
+              type="text"
+              id="productPrice"
+              name="productPrice"
+              class="w-full rounded"
+              required
+              v-model.number="productData.price"
+            />
         </div>
         <div class="flex-auto">
-          <label for="productUnit" class="block mb-4">產品品項單位
-          <input
-            type="text"
-            id="productUnit"
-            name="productUnit"
-            class="rounded w-full"
-            v-model="productData.unit"
-          />
-          </label>
+          <label for="productUnit" class="block mb-4"
+            >產品品項單位</label>
+            <input
+              type="text"
+              id="productUnit"
+              name="productUnit"
+              class="w-full rounded"
+              v-model="productData.unit"
+            />
         </div>
       </div>
-      <div class="flex justify-between gap-4">
+      <div class="flex gap-4 justify-between">
         <button
-          class="flex-auto py-2 bg-success-500 text-white hover:bg-success-600
-          hover:shadow hover:shadow-success-400 transition duration-300 rounded-md"
+          class="flex-auto py-2 text-white bg-success-500 rounded-md
+          hover:bg-success-600 hover:shadow hover:shadow-success-400
+          transition duration-300"
           type="submit"
         >
           {{ selectType === 'productEdit' ? '確定修改' : '新增產品' }}
         </button>
         <button
-          class="flex-auto py-2 bg-gray-500 text-white hover:bg-gray-600
-          hover:shadow hover:shadow-gray-400 transition duration-300 rounded-md"
+          class="flex-auto py-2 text-white bg-gray-500 hover:bg-gray-600 rounded-md hover:shadow
+          hover:shadow-gray-400 transition duration-300"
           @click="handleResetFormInput()"
           type="reset"
         >

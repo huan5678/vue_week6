@@ -15,18 +15,18 @@ export default {
 </script>
 
 <template>
-  <div class="bg-gray-900 flex justify-between items-center space-y-3">
-    <h2 class="text-white text-lg p-4">{{ title }}</h2>
+  <div class="flex justify-between items-center space-y-3 bg-gray-900">
+    <h2 class="p-4 text-lg text-white">{{ title }}</h2>
     <button
       type="button"
-      class="text-gray-50 p-4 transition-all duration-200 ease-in-out
-      hover:text-gray-100 hover:scale-125"
+      class="p-4 text-gray-50 hover:text-gray-100 transition-all duration-200
+      ease-in-out hover:scale-125"
       @click="closeModal"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
-        class="bi bi-x h-8 w-8"
+        class="w-8 h-8"
         viewBox="0 0 16 16"
       >
         <path

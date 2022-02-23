@@ -78,7 +78,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
-    function({ addComponents }) {
+    function ({ addComponents }) {
       addComponents({
         '.container': {
           maxWidth: '100%',

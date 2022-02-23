@@ -51,10 +51,10 @@ export default {
 
 <template>
   <section class="container pt-14 pb-20" id="order">
-    <h2 class="text-center text-2xl mb-8">填寫訂單資料</h2>
+    <h2 class="mb-8 text-2xl text-center">填寫訂單資料</h2>
     <Form
       action=""
-      class="space-y-4 md:w-2/3 mx-auto"
+      class="mx-auto space-y-4 md:w-2/3"
       @submit="handleSubmit"
       :validation-schema="schema"
     >
@@ -100,25 +100,24 @@ export default {
           for="userRemark"
           class="block mb-2"
           :class="{ 'opacity-30 cursor-not-allowed': cartListLength === 0 }"
-          >備註
+          >備註</label>
         <textarea
           id="userRemark"
           name="userRemark"
-          class="form-control w-full"
+          class="w-full form-control"
           v-model="userRemark"
           rows="4"
           placeholder="想要告訴我們什麼？"
           :disabled="cartListLength === 0"
           :class="{ 'opacity-30 cursor-not-allowed': cartListLength === 0 }"
         ></textarea>
-        </label>
       </div>
 
       <div class="pt-12">
         <button
           type="submit"
-          class="w-10/12 rounded bg-black text-white grid place-content-center
-          text-xl py-3 mx-auto transition duration-300 ease-in-out hover:bg-primary-dark"
+          class="grid place-content-center py-3 mx-auto w-10/12 text-xl
+          text-white bg-black rounded transition duration-300 ease-in-out hover:bg-primary-700"
           :class="{
             'opacity-30 cursor-not-allowed': cartListLength === 0,
           }"

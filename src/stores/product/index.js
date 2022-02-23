@@ -35,7 +35,8 @@ export const useProductStore = defineStore('product', () => {
     if (category === 'all') {
       selectCategory = '';
     }
-    axios.get(`${baseUrl}api/${apiPath}/products?page=${page}${selectCategory}`)
+    console.log(selectCategory);
+    axios.get(`${baseUrl}api/${apiPath}/products?page=${page}&category=${selectCategory}`)
       .then((res) => {
         // console.log(res.data);
         productList.products = res.data.products;

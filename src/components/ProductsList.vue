@@ -38,15 +38,14 @@ export default {
 
 <template>
   <section class="container mb-14">
-    <div class="flex items-center gap-2 mb-6">
-      <label for="category" class="text-xl">選擇分類項目
+    <div class="flex gap-2 items-center mb-6">
+      <label for="category" class="text-xl">選擇分類項目</label>
       <select
         id="category"
-        class="border rounded py-2 w-3/12 text-md"
+        class="py-2 rounded border"
         @change="handleCategoryChange"
         defaultValue="All"
         v-model="selectCategory"
-        :disabled="isLoading"
       >
         <option value="" selected disabled>請選擇</option>
         <option value="All">全部</option>
@@ -54,12 +53,11 @@ export default {
           {{ category }}
         </option>
       </select>
-      </label>
+
     </div>
-    <ul class="flex flex-wrap justify-between items-stretch gap-4">
+    <ul class="grid grid-cols-4 gap-4">
       <li
-        class="relative lg:w-1/4 md:w-1/2 rounded-md shadow overflow-hidden -mx-6
-        flex flex-col justify-between"
+        class=""
         v-for="product in productList"
         :key="product.id"
       >

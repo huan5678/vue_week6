@@ -34,23 +34,23 @@ export default {
 </script>
 
 <template>
-  <section class="space-y-4 bg-gray-50 rounded-md overflow-hidden">
+  <section class="overflow-hidden space-y-4 bg-gray-50 rounded-md">
     <ModalCardTitle title="請確認是否刪除" :close-modal="handleOpenModal" />
-    <p class="p-2 text-secondary-500 text-center text-xl">
+    <p class="p-2 text-xl text-center text-secondary-500">
       {{ productData.title }}
     </p>
-    <div class="container flex justify-between gap-4 p-4">
+    <div class="container flex gap-4 justify-between p-4">
       <button
-        class="flex-auto p-2 bg-danger-500 text-white rounded-md
-        hover:bg-danger-600 hover:shadow hover:shadow-danger-500 transition duration-300"
+        class="flex-auto p-2 text-white bg-danger-500 hover:bg-danger-600
+        rounded-md hover:shadow hover:shadow-danger-500 transition duration-300"
         type="button"
         @click="handleSetDeleteProduct(productData.id)"
       >
         確認刪除
       </button>
       <button
-        class="flex-auto p-2 bg-gray-500 text-white rounded-md
-        hover:bg-gray-600 hover:shadow hover:shadow-gray-500 transition duration-300"
+        class="flex-auto p-2 text-white bg-gray-500 hover:bg-gray-600
+        rounded-md hover:shadow hover:shadow-gray-500 transition duration-300"
         @click="closeModal"
         type="button"
       >

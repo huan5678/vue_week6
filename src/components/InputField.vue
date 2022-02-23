@@ -70,8 +70,8 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 justify-center flex-auto">
-    <label :for="name">{{ label }}
+  <div class="flex flex-col flex-auto gap-2 justify-center">
+    <label class="block" :for="name">{{ label }}</label>
     <input
       class="form-control"
       :class="{ 'bg-danger-100 ring-danger-500': errorMessage }"
@@ -88,7 +88,6 @@ export default {
       @input="handleChange"
       @blur="handleBlur"
     />
-    </label>
     <p class="text-danger-500" v-show="errorMessage || meta.valid">
       {{ errorMessage || successMessage }}
     </p>

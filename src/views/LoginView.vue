@@ -49,37 +49,37 @@ export default {
 <template>
   <main class="flex justify-center items-center h-screen bg-gray-50">
     <div class="container max-w-lg">
-      <form class="space-y-8 p-8 bg-white rounded shadow-sm" @submit.prevent="handlerSubmit">
+      <form class="p-8 space-y-8 bg-white rounded shadow-sm" @submit.prevent="handlerSubmit">
         <legend class="text-4xl text-center">請先登入</legend>
         <div class="space-y-4">
-          <label for="name" class="block">使用者帳號
+          <label for="name" class="block">使用者帳號</label>
           <input
             id="name"
             type="text"
             name="userName"
             placeholder="請輸入帳號Email"
             v-model.trim="userName"
-            class="p-2 rounded border w-full bg-gray-50 text-primary-800 invalid:text-primary-600
-            invalid:border-primary-600 focus:ring-primary-500 focus:text-primary-600"
+            class="p-2 w-full text-primary-800 border
+            focus:text-primary-600 bg-gray-50 rounded focus:ring-primary-500
+            invalid:border-primary-600 invalid:text-primary-600"
           />
-          </label>
         </div>
         <div class="space-y-4">
-          <label for="password" class="block">使用者密碼
+          <label for="password" class="block">使用者密碼</label>
           <input
             id="password"
             type="password"
-            class="p-2 rounded border w-full bg-gray-50 text-primary-800 invalid:text-primary-600
-            invalid:border-primary-600 focus:ring-primary-500 focus:text-primary-600"
+            class="p-2 w-full text-primary-800 bg-gray-50 rounded border
+            invalid:text-primary-600 invalid:border-primary-600
+            focus:text-primary-600 focus:ring-primary-500"
             v-model="userPassword"
             placeholder="請輸入密碼"
           />
-          </label>
         </div>
         <button
           type="submit"
-          class="w-full bg-primary-500 text-white rounded-lg py-4 w-100
-          transition duration-300 hover:bg-primary-600"
+          class="py-4 w-full text-white bg-primary-500 hover:bg-primary-600 rounded-lg
+          transition duration-300"
         >
           登入
         </button>

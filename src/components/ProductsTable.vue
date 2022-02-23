@@ -52,88 +52,89 @@ export default {
 };
 </script>
 <template>
-  <section class="space-y-4 overflow-auto p-2">
-    <div class="flex items-center justify-end gap-4 p-6">
+  <section class="overflow-auto p-2 space-y-4">
+    <div class="flex gap-4 justify-end items-center p-6">
       <h2 class="text-4xl font-medium">產品列表</h2>
       <h2 class="ml-auto text-xl">管理者登出</h2>
       <button
-        class="rounded bg-danger-500 px-6 py-2 text-white transition
-        duration-300 hover:bg-danger-600 hover:shadow hover:shadow-danger-400"
+        class="py-2 px-6 text-white bg-danger-500 hover:bg-danger-600 rounded
+        hover:shadow hover:shadow-danger-400 transition duration-300"
         @click="handleIsLogout()"
       >
         登出
       </button>
     </div>
-    <table class="mb-4 table-auto rounded bg-gray-50">
+    <table class="mb-4 bg-gray-50 rounded table-auto">
       <thead class="bg-gray-800">
         <tr class="text-white">
-          <td width="200" class="whitespace-nowrap p-4 text-lg">產品名稱</td>
-          <td width="250" class="whitespace-nowrap p-4 text-right text-lg">原價</td>
-          <td width="250" class="whitespace-nowrap p-4 text-right text-lg">售價</td>
-          <td width="250" class="whitespace-nowrap p-4 text-center text-lg">是否啟用</td>
-          <td width="200" class="whitespace-nowrap p-4 text-center text-lg">查看細節</td>
-          <td colspan="2" width="400" class="whitespace-nowrap p-4 text-center text-lg">功能</td>
+          <td width="200" class="p-4 text-lg whitespace-nowrap">產品名稱</td>
+          <td width="250" class="p-4 text-lg text-right whitespace-nowrap">原價</td>
+          <td width="250" class="p-4 text-lg text-right whitespace-nowrap">售價</td>
+          <td width="250" class="p-4 text-lg text-center whitespace-nowrap">是否啟用</td>
+          <td width="200" class="p-4 text-lg text-center whitespace-nowrap">查看細節</td>
+          <td colspan="2" width="400" class="p-4 text-lg text-center whitespace-nowrap">功能</td>
         </tr>
       </thead>
       <tbody>
         <tr
-          class="border-b border-gray-300 hover:bg-gray-200"
+          class="hover:bg-gray-200 border-b border-gray-300"
           v-for="item in productList.products"
           :key="item.id"
         >
-          <td class="whitespace-nowrap py-2 px-4">{{ item.title }}</td>
-          <td class="whitespace-nowrap py-2 px-4 text-right">{{ item.origin_price }}</td>
-          <td class="whitespace-nowrap py-2 px-4 text-right">{{ item.price }}</td>
+          <td class="py-2 px-4 whitespace-nowrap">{{ item.title }}</td>
+          <td class="py-2 px-4 text-right whitespace-nowrap">{{ item.origin_price }}</td>
+          <td class="py-2 px-4 text-right whitespace-nowrap">{{ item.price }}</td>
           <td
-            class="whitespace-nowrap py-2 px-4 text-center text-primary-400"
+            class="py-2 px-4 text-center text-primary-400 whitespace-nowrap"
             v-if="item.is_enabled == 1"
           >
             啟用
           </td>
           <td
-            class="whitespace-nowrap py-2 px-4 text-center text-gray-400"
+            class="py-2 px-4 text-center text-gray-400 whitespace-nowrap"
             v-else-if="item.is_enabled == 0"
           >
             未啟用
           </td>
           <td
-            class="whitespace-nowrap py-2 px-4 text-center text-warning-600"
+            class="py-2 px-4 text-center text-warning-600 whitespace-nowrap"
             v-else-if="item.is_enabled == 2"
           >
             未上架
           </td>
           <td
-            class="whitespace-nowrap py-2 px-4 text-center text-danger-700"
+            class="py-2 px-4 text-center text-danger-700 whitespace-nowrap"
             v-if="item.is_enabled == 3"
           >
             已下架
           </td>
 
-          <td class="whitespace-nowrap py-2 px-4 text-center">
+          <td class="py-2 px-4 text-center whitespace-nowrap">
             <button
               type="button"
-              class="rounded bg-primary-500 py-2 px-4 text-white transition duration-200
-              hover:bg-primary-600 hover:shadow hover:shadow-primary-400"
+              class="py-2 px-4 text-white bg-primary-500 hover:bg-primary-600 rounded hover:shadow
+              hover:shadow-primary-400 transition duration-200"
               @click="openModal('getDetail', item)"
             >
               查看細節
             </button>
           </td>
-          <td class="whitespace-nowrap py-2 px-4 text-center">
+          <td class="py-2 px-4 text-center whitespace-nowrap">
             <button
               type="button"
-              class="rounded bg-secondary-700 py-2 px-4 text-white transition duration-200
-              hover:bg-secondary-800 hover:shadow hover:shadow-secondary-400"
+              class="py-2 px-4 text-white bg-secondary-700 rounded
+              hover:bg-secondary-800 hover:shadow
+              hover:shadow-secondary-400 transition duration-200"
               @click="openModal('productEdit', item)"
             >
               修改內容
             </button>
           </td>
-          <td class="whitespace-nowrap py-2 px-4 text-center">
+          <td class="py-2 px-4 text-center whitespace-nowrap">
             <button
               type="button"
-              class="rounded bg-danger-500 py-2 px-4 text-white transition duration-200
-              hover:bg-danger-600 hover:shadow hover:shadow-danger-400"
+              class="py-2 px-4 text-white bg-danger-500 hover:bg-danger-600 rounded hover:shadow
+              hover:shadow-danger-400 transition duration-200"
               @click="openModal('productDelete', item)"
             >
               刪除品項
@@ -142,12 +143,12 @@ export default {
         </tr>
       </tbody>
     </table>
-    <div class="flex items-center justify-between">
+    <div class="flex justify-between items-center">
       <p>目前有{{ productList.products.length }}項產品</p>
       <button
         type="button"
-        class="rounded bg-warning-500 py-2 px-4 text-white transition duration-200
-        hover:bg-warning-600 hover:shadow hover:shadow-warning-400"
+        class="py-2 px-4 text-white bg-warning-500 hover:bg-warning-600 rounded hover:shadow
+        hover:shadow-warning-400 transition duration-200"
         @click="openModal('productCreate', tempProduct)"
       >
         新增品項
@@ -155,12 +156,12 @@ export default {
     </div>
     <!-- 分頁 -->
     <div>
-      <ul class="flex items-center justify-center gap-2">
+      <ul class="flex gap-2 justify-center items-center">
         <li class>
           <button
             type="button"
-            class="rounded border border-primary-500 p-2 text-primary-500
-            disabled:border-gray-400 disabled:text-gray-500"
+            class="p-2 text-primary-500 disabled:text-gray-500 rounded border
+            border-primary-500 disabled:border-gray-400"
             :disabled="!productList.pagination.has_pre"
             @click="handleGetProductList(productList.pagination.current_page - 1)"
           >
@@ -183,7 +184,7 @@ export default {
         <li v-for="page in productList.pagination.total_pages" :key="page + new Date()">
           <button
             type="button"
-            class="rounded border-primary-500 py-[6px] px-3"
+            class="py-[6px] px-3 rounded border-primary-500"
             :class="{
               'bg-primary-700 text-white': page === productList.pagination.current_page,
             }"
@@ -195,8 +196,8 @@ export default {
         <li class>
           <button
             type="button"
-            class="rounded border border-primary-500 p-2 text-primary-500
-            disabled:border-gray-400 disabled:text-gray-500"
+            class="p-2 text-primary-500 disabled:text-gray-500 rounded border
+            border-primary-500 disabled:border-gray-400"
             :disabled="!productList.pagination.has_next"
             @click="handleGetProductList(productList.pagination.current_page + 1)"
           >
