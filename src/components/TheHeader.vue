@@ -1,8 +1,15 @@
 <script>
+import { useRoute } from 'vue-router';
 import AppLink from './AppLink.vue';
 
 export default {
   components: { AppLink },
+  setup() {
+    const route = useRoute();
+    return {
+      route,
+    };
+  },
 };
 </script>
 <template>
@@ -10,7 +17,7 @@ export default {
     <h2>
       <AppLink to="/"> LOGO </AppLink>
     </h2>
-    <ul class="flex gap-4 justify-between items-center">
+    <ul class="flex gap-4 justify-between items-center" v-if="route.name !== 'product-detail'">
       <li>
         <AppLink to="product"> 產品列表 </AppLink>
       </li>
