@@ -1,6 +1,6 @@
 <script>
 import {
-  onMounted, computed, ref, watch,
+  onMounted, computed, ref, watchEffect,
 } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -20,8 +20,8 @@ export default {
       handleGetProductDetail(params.params.id);
     });
 
-    watch(() => params.params.id, (newUrl) => {
-      if (newUrl !== undefined) handleGetProductDetail(newUrl);
+    watchEffect(() => {
+      if (params.params.id !== undefined) handleGetProductDetail(params.params.id);
     });
 
     function handleUpdateCart(id, num) {
